@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { SubmissionButton } from './SubmissionButton';
 
 export const SubmissionButtonCollection: React.FunctionComponent = (): JSX.Element => {
@@ -15,12 +15,16 @@ export const SubmissionButtonCollection: React.FunctionComponent = (): JSX.Eleme
 
     const submissionButtonComponents = submissionButtons.map((button, i) => {
         return (
-            <SubmissionButton key={i} buttonText={button.buttonText} buttonClass={button.buttonClass} />
+            <SubmissionButton
+                key={i}
+                buttonText={button.buttonText}
+                buttonClass={button.buttonClass}
+            />
         )
     })
     return (
         <div className="submission-buttons-row">
-            { submissionButtonComponents }
+            {submissionButtonComponents}
         </div>
     );
 

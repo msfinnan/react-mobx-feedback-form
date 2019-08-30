@@ -1,37 +1,79 @@
-import React from 'react';
+import * as React from 'react';
+import { observer, Provider } from 'mobx-react';
+import { observable, action } from 'mobx';
 import './App.css';
 import './Components/BodyText';
-// import BodyText from './Components/BodyText';
 import { EmojiCollection } from './Components/EmojiCollection';
 import { DifficultyButtonCollection } from './Components/DifficultyButtonCollection';
 import { SubmissionButtonCollection } from './Components/SubmissionButtonCollection';
 import { BodyText } from './Components/BodyText';
 import { CommentBox } from './Components/CommentBox';
+import { UserFeedback } from './Components/UserFeedback';
+import { FeedbackFormStore } from './stores/FeedbackFormStore';
 
-// import closeButton from ;
 
-function App() {
 
-  const closeButton = require('./images/close_button.PNG');
+@observer
+export class App extends React.Component<{}, {}> {
 
-  return (
-    <div className="app">
-      <div className="top-row">
-        <h1 className="header">
-          We would love your Feedback   
-        </h1>
-        <img className="close-button" src={ closeButton } alt="close button"/>
-      </div>
-      <BodyText text="Overall, how satisfied were you with the most recent experience with WExp." />
-      <EmojiCollection />
-      <BodyText text="How easy was it to complete all the steps necessary to create, configure, launch, analyze results and teminate your experiment/CFR?" />
-      <DifficultyButtonCollection />
-      <CommentBox text="(Optional) Provide details about your experience" commentBoxClassName="experince-details-textbox"/> 
-      <BodyText text="(Optional) We would really appreciate if you could take 1 more minute to provide additional details by answering 2 more questions." />
-      <SubmissionButtonCollection />
-      
-    </div>
-  );
+  private feedbackFormStore = new FeedbackFormStore();
+
+  // display what was submitted
+  @observable private userInputDisplay: string;
+  @observable private emojiSelectedDisplay: string;
+  @observable private difficultyLevelSelectedDisplay: string;
+
+  @action
+  private handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+    this.userInputDisplay = this.feedbackFormStore.commentBoxUserInput;
+    this.emojiSelectedDisplay = this.feedbackFormStore.emojiSelected;
+    this.difficultyLevelSelectedDisplay = this.feedbackFormStore.difficultyLevelSelected;
+  }
+
+  public render() {
+
+    return (
+      <Provider feedbackFormStore={this.feedbackFormStore}>
+
+        <div className="app">
+          <form onSubmit={this.handleSubmit} className="form">
+
+            <div className="top-row">
+              <h1 className="header">
+                We would love your Feedback
+              </h1>
+              <img className="close-button"
+                src={require('./images/close_button.PNG')}
+                alt="close button"
+              />
+            </div>
+
+            <BodyText text={FeedbackFormStore.firstBodyText} />
+            <EmojiCollection setSelectedEmoji={this.feedbackFormStore.setSelectedEmoji} />
+            <BodyText text={FeedbackFormStore.secondBodyText} />
+            <DifficultyButtonCollection
+              setSelectedDifficultyButton={this.feedbackFormStore.setSelectedDifficultyButton}
+            />
+            <CommentBox feedbackFormStore={this.feedbackFormStore} />
+            <BodyText text={FeedbackFormStore.thirdBodyText} />
+            <SubmissionButtonCollection />
+          </form>
+
+          <section className="user-feedback">
+            <UserFeedback
+              emoji={this.emojiSelectedDisplay}
+              satisfaction={this.difficultyLevelSelectedDisplay}
+              comments={this.userInputDisplay}
+            />
+          </section>
+
+        </div>
+
+      </Provider>
+    );
+  }
 }
 
-export default App;
+
+
