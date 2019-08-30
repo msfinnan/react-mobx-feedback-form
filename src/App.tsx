@@ -12,7 +12,6 @@ import { UserFeedback } from './Components/UserFeedback';
 import { FeedbackFormStore } from './stores/FeedbackFormStore';
 
 
-
 @observer
 export class App extends React.Component<{}, {}> {
 

@@ -6,7 +6,7 @@ import { observable, action } from 'mobx';
 interface EmojiProps {
     src: string;
     alt: string;
-    setSelectedEmoji: Function;
+    setSelectedEmoji: (dataFromEmoji: string) => void;
 }
 
 @observer
