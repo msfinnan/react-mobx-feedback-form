@@ -1,38 +1,35 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { observer } from 'mobx-react'
+import { action, observable } from 'mobx';
 
-//ok to use type or interface? 
-type DifficultyButtonProps = {
+
+interface DifficultyButtonProps {
     buttonText: string;
+    setSelectedDifficultyButton: Function;
 }
 
-type DifficultyButtonState = {
-    buttonClicked: boolean;
-}
-
-export class DifficultyButton extends Component<DifficultyButtonProps, DifficultyButtonState> {
+@observer
+export class DifficultyButton extends React.Component<DifficultyButtonProps, {}> {
+    @observable private buttonClicked: boolean;
 
     constructor(props: DifficultyButtonProps) {
         super(props);
-        this.state = {
-            buttonClicked: false
-        }
+        this.buttonClicked = false;
     }
-    // state: DifficultyButtonState = {
-    //     buttonClicked: false
-    // };
 
+    @action
     private onButtonClick = (): void => {
-        this.setState({ buttonClicked: !this.state.buttonClicked })
+        this.buttonClicked = !this.buttonClicked;
+        this.props.setSelectedDifficultyButton(this.props.buttonText);
     };
-
 
     public render(): JSX.Element {
         return (
-            <button 
-                className={this.state.buttonClicked ? "difficulty-button-clicked": "difficulty-button" }
+            <button
+                className={this.buttonClicked ? "difficulty-button-clicked" : "difficulty-button"}
                 type="button"
-                onClick={ this.onButtonClick }>
-                { this.props.buttonText }
+                onClick={this.onButtonClick}>
+                {this.props.buttonText}
             </button>
         );
     }

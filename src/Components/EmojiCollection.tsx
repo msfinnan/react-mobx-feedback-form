@@ -1,10 +1,15 @@
-import React from 'react';
+import * as React from 'react';
 import { Emoji } from './Emoji';
 
 
-export const EmojiCollection: React.FunctionComponent = (): JSX.Element => {
+interface EmojiCollectionProps {
+    setSelectedEmoji: (dataFromEmoji: string) => void;
 
-    const emojis: { src: string, alt: string }[] = [
+}
+
+export class EmojiCollection extends React.Component<EmojiCollectionProps, {}> {
+
+    private emojis: { src: string, alt: string }[] = [
         {
             src: 'images/red_emoji.PNG',
             alt: "red emoji",
@@ -27,16 +32,26 @@ export const EmojiCollection: React.FunctionComponent = (): JSX.Element => {
         },
     ];
 
-    const emojiComponents = emojis.map((emoji, i) => {
+    private emojiComponents = this.emojis.map((emoji, i) => {
         return (
-            <Emoji key={i} src={emoji.src} alt={emoji.alt} />
+            <Emoji
+                key={i}
+                src={emoji.src}
+                alt={emoji.alt}
+                setSelectedEmoji={this.props.setSelectedEmoji}
+            />
         );
     });
 
-    return (
-        <div>
-            { emojiComponents }
-        </div>
-    );
+
+
+
+    public render(): JSX.Element {
+        return (
+            <div>
+                {this.emojiComponents}
+            </div>
+        );
+    }
 
 };
