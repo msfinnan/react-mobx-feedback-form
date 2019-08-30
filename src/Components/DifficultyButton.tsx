@@ -5,7 +5,7 @@ import { action, observable } from 'mobx';
 
 interface DifficultyButtonProps {
     buttonText: string;
-    setSelectedDifficultyButton: Function;
+    setSelectedDifficultyButton: (dataFromDifficultyButton: string) => void;
 }
 
 @observer

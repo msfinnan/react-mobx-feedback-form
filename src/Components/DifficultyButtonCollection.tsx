@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DifficultyButton } from './DifficultyButton';
 
 interface DifficultyButtonCollectionProps {
-    setSelectedDifficultyButton: Function;
+    setSelectedDifficultyButton: (dataFromDifficultyButton: string) => void;
 }
 export class DifficultyButtonCollection extends React.Component<DifficultyButtonCollectionProps, {}>{
 
