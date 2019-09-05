@@ -18,6 +18,15 @@ export class Emoji extends React.Component<EmojiProps, {}> {
         this.buttonClicked = false;
     }
 
+    componentDidMount() {
+        console.log(`emoji componentDidMount and the value of buttonClicked is ${this.buttonClicked}`)
+        //logs when page is loaded
+    }
+
+    componentDidUpdate() {
+        console.log(`emoji componentDidUpdate and the value of buttonClicked is ${this.buttonClicked}`)
+    }
+
     @action
     private onButtonClick = (): void => {
         this.buttonClicked = !this.buttonClicked;
