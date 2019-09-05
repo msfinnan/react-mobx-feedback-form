@@ -59,7 +59,7 @@ export class App extends React.Component<{}, {}> {
             <SubmissionButtonCollection />
           </form>
 
-          <section className="user-feedback">
+          <section>
             <UserFeedback
               emoji={this.emojiSelectedDisplay}
               satisfaction={this.difficultyLevelSelectedDisplay}
