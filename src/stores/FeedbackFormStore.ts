@@ -20,14 +20,16 @@ export interface UserLength {
 export class FeedbackFormStore {
 
     private getUserAsync = async (): Promise<UserJson[]> => {
-        const response: Response = await fetch(`https://jsonplaceholder.typicode.com/users`);
-        const data: UserJson[] = await (response.json() as Promise<UserJson[]>);
+        const data: UserJson[] = await $.ajax(`https://jsonplaceholder.typicode.com/users`);
+        // const response: Response = await fetch(`https://jsonplaceholder.typicode.com/users`);
+        // const data: UserJson[] = await (response.json() as Promise<UserJson[]>);
         return data
     }
 
     private getPostsAsync3 = async (userId: number): Promise<PostJson> => {
-        const response: Response = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
-        const data: PostJson = await response.json();
+        const data: PostJson = await $.ajax(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
+        // const response: Response = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
+        // const data: PostJson = await response.json();
         return data
     }
 
@@ -36,20 +38,19 @@ export class FeedbackFormStore {
     @action
     public async init3(): Promise<void> {
 
-        let userData: UserJson[] = await this.getUserAsync();
+        const userData: UserJson[] = await this.getUserAsync();
 
-        let allUsers: Promise<PostJson>[] = userData.map((user: UserJson): Promise<PostJson> => {
+        const allUsers: Promise<PostJson>[] = userData.map((user: UserJson): Promise<PostJson> => {
             const postData: Promise<PostJson> = this.getPostsAsync3(user.id)
             return postData
         });
         const singlePromise: Promise<PostJson[]> = Promise.all(allUsers)
-        let postJson: PostJson[] = await singlePromise;
+        const postJson: PostJson[] = await singlePromise;
 
         const apiData: UserLength[] = postJson.map((post, i) => {
             const singleUserData: UserJson = userData.find(user => post[0].userId === user.id); //user is one element in the array, iterates through array of UserJson objects and returns first objec where user id matches post user id 
             const username: string = singleUserData.name;
-            //   return <li key={i}>{`${userName} posted ${post.length} comments`}</li>
-            return {username: username, length: post.length} //todo map from username to postlength 
+            return {username: username, length: post.length} 
         });
         runInAction(() => {
             this.apiDisplayData = apiData;
