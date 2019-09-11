@@ -11,7 +11,6 @@ import { CommentBox } from './Components/CommentBox';
 import { UserFeedback } from './Components/UserFeedback';
 import { FeedbackFormStore } from './stores/FeedbackFormStore';
 
-
 @observer
 export class App extends React.Component<{}, {}> {
 
@@ -28,6 +27,7 @@ export class App extends React.Component<{}, {}> {
     this.userInputDisplay = this.feedbackFormStore.commentBoxUserInput;
     this.emojiSelectedDisplay = this.feedbackFormStore.emojiSelected;
     this.difficultyLevelSelectedDisplay = this.feedbackFormStore.difficultyLevelSelected;
+    this.feedbackFormStore.init3();
   }
 
   public render() {
@@ -64,6 +64,8 @@ export class App extends React.Component<{}, {}> {
               emoji={this.emojiSelectedDisplay}
               satisfaction={this.difficultyLevelSelectedDisplay}
               comments={this.userInputDisplay}
+              apiData={this.feedbackFormStore.apiDisplayData}
+              // feedbackFormStore={this.feedbackFormStore} 
             />
           </section>
 

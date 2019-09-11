@@ -17,15 +17,6 @@ export class DifficultyButton extends React.Component<DifficultyButtonProps, {}>
         this.buttonClicked = false;
     }
 
-    componentDidMount() {
-        console.log(`difficulty button componentDidMount and the value of buttonClicked is ${this.buttonClicked}`)
-        //logs when page is loaded
-    }
-
-    componentDidUpdate() {
-        console.log(`difficulty button componentDidUpdate and the value of buttonClicked is ${this.buttonClicked}`)
-    }
-
     @action
     private onButtonClick = (): void => {
         this.buttonClicked = !this.buttonClicked;
