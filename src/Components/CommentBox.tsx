@@ -9,14 +9,6 @@ interface CommentBoxProps {
 
 export class CommentBox extends React.Component<CommentBoxProps, {}> {
     
-    componentDidMount() {
-        console.log("comment box componentDidMount")
-        //logs when page is loaded
-    }
-    
-    componentDidUpdate() {
-        console.log("comment box componentDidUpdate")
-    }
     public render() {
         return (
             <textarea
