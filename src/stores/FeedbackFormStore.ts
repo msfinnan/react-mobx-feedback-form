@@ -1,61 +1,40 @@
 import { observable, action, runInAction } from "mobx";
-import * as $ from "jquery"
+import { FeedbackFormDataService, UserJson, PostJson } from "../DataServices/FeedbackFormDataService";
 //manage state specific to this form 
 //handle anything else specific to this form (text strings, validation)
 
-interface UserJson {
-    id: number;
-    name: string;
-};
-
-interface PostJson {
-    length: number;
-}
-
-export interface UserLength {
+export interface UserNumPosts {
     username: string;
-    length: number 
+    numPosts: number 
 }
 
 export class FeedbackFormStore {
 
-    private getUserAsync = async (): Promise<UserJson[]> => {
-        const data: UserJson[] = await $.ajax(`https://jsonplaceholder.typicode.com/users`);
-        // const response: Response = await fetch(`https://jsonplaceholder.typicode.com/users`);
-        // const data: UserJson[] = await (response.json() as Promise<UserJson[]>);
-        return data
-    }
+    private feedbackFormDataService = new FeedbackFormDataService();
 
-    private getPostsAsync3 = async (userId: number): Promise<PostJson> => {
-        const data: PostJson = await $.ajax(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
-        // const response: Response = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
-        // const data: PostJson = await response.json();
-        return data
-    }
-
-    @observable public apiDisplayData: UserLength[];
+    @observable public apiDisplayData: UserNumPosts[];
 
     @action
     public async init3(): Promise<void> {
 
-        const userData: UserJson[] = await this.getUserAsync();
+        const userData: UserJson[] = await this.feedbackFormDataService.getUserAsync();
 
-        const allUsers: Promise<PostJson>[] = userData.map((user: UserJson): Promise<PostJson> => {
-            const postData: Promise<PostJson> = this.getPostsAsync3(user.id)
-            return postData
+        const singleUserPosts: Promise<PostJson>[] = userData.map((user: UserJson): Promise<PostJson> => {
+            const postData: Promise<PostJson> = this.feedbackFormDataService.getPostsAsync(user.id)
+            return postData;
         });
-        const singlePromise: Promise<PostJson[]> = Promise.all(allUsers)
+        const singlePromise: Promise<PostJson[]> = Promise.all(singleUserPosts)
         const postJson: PostJson[] = await singlePromise;
 
-        const apiData: UserLength[] = postJson.map((post, i) => {
+        const apiData: UserNumPosts[] = postJson.map((post) => {
             const singleUserData: UserJson = userData.find(user => post[0].userId === user.id); //user is one element in the array, iterates through array of UserJson objects and returns first objec where user id matches post user id 
             const username: string = singleUserData.name;
-            return {username: username, length: post.length} 
+            return {username: username, numPosts: post.numPosts} 
         });
         runInAction(() => {
             this.apiDisplayData = apiData;
         })
-        console.log(apiData)
+        console.log(apiData);
     }
 
 
