@@ -6,7 +6,7 @@ export interface UserJson {
 };
 
 export interface PostJson {
-    numPosts: number;
+    length: number;
 }
 
 

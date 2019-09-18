@@ -30,8 +30,8 @@ export class FeedbackFormStore {
             const singleUserData: UserJson = userData.find(user => post[0].userId === user.id); //user is one element in the array, iterates through array of UserJson objects and returns first objec where user id matches post user id 
             const username: string = singleUserData.name;
             console.log("in store and post is", post)
-            console.log("in store and num posts is", post.numPosts)
-            return {username: username, numPosts: (post as any).length} //todo look at interface, this is a workaround
+            console.log("in store and num posts is", post.length)
+            return {username: username, numPosts: post.length} //todo look at interface, this is a workaround
         });
         runInAction(() => {
             this.apiDisplayData = apiData;
