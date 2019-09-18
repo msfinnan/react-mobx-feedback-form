@@ -1,36 +1,37 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { observer } from 'mobx-react';
+import { observable, action } from 'mobx';
 
 
-type EmojiProps = {
+interface EmojiProps {
     src: string;
     alt: string;
+    setSelectedEmoji: (dataFromEmoji: string) => void;
 }
 
-type EmojiState = {
-    buttonClicked: boolean;
-}
+@observer
+export class Emoji extends React.Component<EmojiProps, {}> {
+    @observable private buttonClicked: boolean;
 
-export class Emoji extends Component<EmojiProps, EmojiState> {
-    
     constructor(props: EmojiProps) {
         super(props);
-        this.state = {
-            buttonClicked: false
-        }
+        this.buttonClicked = false;
     }
 
+    @action
     private onButtonClick = (): void => {
-        this.setState({ buttonClicked: !this.state.buttonClicked })
+        this.buttonClicked = !this.buttonClicked;
+        this.props.setSelectedEmoji(this.props.src);
     }
 
     public render(): JSX.Element {
         return (
             <img
-                src={ this.props.src }
-                className={ this.state.buttonClicked ? "emoji-border" : undefined }
-                alt={ this.props.alt }
-                onClick={ this.onButtonClick }>
-            </img> 
+                src={this.props.src}
+                className={this.buttonClicked ? "emoji-border" : null}
+                alt={this.props.alt}
+                onClick={this.onButtonClick}>
+            </img>
         );
     }
 }

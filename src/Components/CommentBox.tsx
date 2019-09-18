@@ -1,35 +1,21 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { FeedbackFormStore } from '../stores/FeedbackFormStore';
 
-type CommentBoxProps = {
-    text: string
-    commentBoxClassName: string
+interface CommentBoxProps {
+    //Pass in instance of feedbackFormStore from App 
+    feedbackFormStore: FeedbackFormStore;
 }
 
-type CommentBoxState = {
-    isValidText: boolean
-}
 
-export class CommentBox extends Component<CommentBoxProps, CommentBoxState> {
-    state: CommentBoxState = {
-        isValidText: true
-    };
-
-
-    onTextInput = (event: React.FormEvent<HTMLTextAreaElement>) => {
-        const letterNumber = /^[a-zA-Z0-9',.!? ]*$/;
-
-        if (!event.currentTarget.value.match(letterNumber)){
-            alert("Symbols not allowed");
-            // this.setState({ isValidText: false })
-        }     
-    }
-
-    render() {
+export class CommentBox extends React.Component<CommentBoxProps, {}> {
+    
+    public render() {
         return (
-            <textarea 
-                className={ this.props.commentBoxClassName } //could do something with isValidText for conditional formatting here 
-                onChange={ this.onTextInput }
-                placeholder={ this.props.text }></textarea>
+            <textarea
+                className={FeedbackFormStore.commentBoxClassName}
+                onChange={this.props.feedbackFormStore.handleUserInput}
+                placeholder={FeedbackFormStore.commentBoxPlaceholderText}
+                name="commentBoxInput"></textarea>
         );
     }
 }

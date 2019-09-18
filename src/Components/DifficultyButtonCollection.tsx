@@ -1,8 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import { DifficultyButton } from './DifficultyButton';
 
-export const DifficultyButtonCollection: React.FunctionComponent = (): JSX.Element => {
-    const difficultyButtons: { buttonText: string }[] = [
+interface DifficultyButtonCollectionProps {
+    setSelectedDifficultyButton: (dataFromDifficultyButton: string) => void;
+}
+export class DifficultyButtonCollection extends React.Component<DifficultyButtonCollectionProps, {}>{
+
+    private difficultyButtons: { buttonText: string }[] = [
         {
             buttonText: "Very Difficult"
         },
@@ -20,16 +24,21 @@ export const DifficultyButtonCollection: React.FunctionComponent = (): JSX.Eleme
         },
     ];
 
-    const difficultyButtonComponents = difficultyButtons.map((button, i) => {
+    private difficultyButtonComponents = this.difficultyButtons.map((button, i) => {
         return (
-            <DifficultyButton key={i} buttonText={button.buttonText} />
+            <DifficultyButton 
+                key={i} buttonText={button.buttonText} 
+                setSelectedDifficultyButton={this.props.setSelectedDifficultyButton} 
+            />
         )
     })
-    return (
-        <div className="buttons-row">
-            { difficultyButtonComponents }
-        </div>
-    );
 
+    public render() {
+        return (
+            <div className="buttons-row">
+                {this.difficultyButtonComponents}
+            </div>
+        );
+    }
 
 };
