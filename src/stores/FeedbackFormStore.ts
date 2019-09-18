@@ -15,7 +15,7 @@ export class FeedbackFormStore {
     @observable public apiDisplayData: UserNumPosts[];
 
     @action
-    public async init3(): Promise<void> {
+    public async init(): Promise<void> {
 
         const userData: UserJson[] = await this.feedbackFormDataService.getUserAsync();
 
@@ -29,9 +29,7 @@ export class FeedbackFormStore {
         const apiData: UserNumPosts[] = postJson.map((post) => {
             const singleUserData: UserJson = userData.find(user => post[0].userId === user.id); //user is one element in the array, iterates through array of UserJson objects and returns first objec where user id matches post user id 
             const username: string = singleUserData.name;
-            console.log("in store and post is", post)
-            console.log("in store and num posts is", post.length)
-            return {username: username, numPosts: post.length} //todo look at interface, this is a workaround
+            return {username: username, numPosts: post.length} 
         });
         runInAction(() => {
             this.apiDisplayData = apiData;
@@ -66,7 +64,6 @@ export class FeedbackFormStore {
     @action
     private getUserInput = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
         this.commentBoxUserInput = event.currentTarget.value;
-        // console.log("in get user input " + event.currentTarget.value)
     }
 
     //broke into 2 methods, userInputValidation and getUserInput. Both are called onChange in CommentBox
@@ -78,13 +75,11 @@ export class FeedbackFormStore {
 
     @action
     public setSelectedEmoji = (dataFromEmoji: string): void => {
-        // console.log(`In App. Selected Emoji is ${dataFromEmoji}`)
         this.emojiSelected = dataFromEmoji;
     }
 
     @action
     public setSelectedDifficultyButton = (dataFromDifficultyButton: string): void => {
-        // console.log(`In App. Selected Difficulty Button is ${dataFromDifficultyButton}`)
         this.difficultyLevelSelected = dataFromDifficultyButton;
     }
 
@@ -245,7 +240,7 @@ export class FeedbackFormStore {
 
 
 
-    // private async init3(): Promise<void> {
+    // private async init(): Promise<void> {
     //     let userData: UserJson[] = await this.getUserAsync()
 
     //     let allUsers: Promise<PostJson>[] = userData.map((user: UserJson): Promise<PostJson> => {
@@ -267,5 +262,5 @@ export class FeedbackFormStore {
     //from before async/await 
     // const fetchResultPromise: Promise<Response> = fetch('https://jsonplaceholder.typicode.com/users');
     // fetchResultPromise.then(this.onUserFetchFulfilled, this.onUserFetchRejected);
-    //     this.init3();
+    //     this.init();
     // }
